@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CyberSafe Legal Aid — AI Multi-Agent System</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+  <!-- ===== HEADER / HERO ===== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-icon">⚖️</span>
+        <div>
+          <h1 class="brand-title">CyberSafe Legal Aid</h1>
+          <p class="brand-subtitle">AI Multi-Agent System for Cyber Law · Powered by IBM Granite</p>
+        </div>
+      </div>
+      <nav class="header-badges">
+        <span class="badge badge-blue">IT Act 2000</span>
+        <span class="badge badge-purple">DPDP Act 2023</span>
+        <span class="badge badge-green">IBM watsonx.ai</span>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== DISCLAIMER BANNER ===== -->
+  <div class="disclaimer-banner">
+    <strong>⚠️ Disclaimer:</strong> This tool is for informational purposes only and is
+    <strong>not a substitute for a licensed lawyer</strong>. For serious legal matters,
+    please consult a qualified legal professional.
+  </div>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="container">
+
+    <!-- ===== TOP TOOL TAB BAR ===== -->
+    <div class="tool-tab-bar">
+      <button class="tool-tab active" onclick="switchTool('ask-section', this)">💬 Ask Legal Question</button>
+      <button class="tool-tab" onclick="switchTool('url-section', this)">🔗 Check Link / URL</button>
+      <button class="tool-tab" onclick="switchTool('analyze-section', this)">📄 Analyze Document</button>
+    </div>
+
+    <!-- HELPLINE STRIP -->
+    <div class="helpline-strip">
+      <div class="helpline-item">
+        <span class="helpline-icon">📞</span>
+        <div>
+          <div class="helpline-number">1930</div>
+          <div class="helpline-label">Cyber Crime Helpline</div>
+        </div>
+      </div>
+      <div class="helpline-divider"></div>
+      <div class="helpline-item">
+        <span class="helpline-icon">🌐</span>
+        <div>
+          <div class="helpline-number">
+            <a href="https://cybercrime.gov.in" target="_blank" rel="noopener">
+              cybercrime.gov.in
+            </a>
+          </div>
+          <div class="helpline-label">National Cyber Crime Portal</div>
+        </div>
+      </div>
+      <div class="helpline-divider"></div>
+      <div class="helpline-item">
+        <span class="helpline-icon">🛡️</span>
+        <div>
+          <div class="helpline-number">
+            <a href="https://cert-in.org.in" target="_blank" rel="noopener">
+              cert-in.org.in
+            </a>
+          </div>
+          <div class="helpline-label">CERT-In (Incident Reporting)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SECTION 1: ASK A CYBER LEGAL QUESTION ===== -->
+    <section class="card" id="ask-section">
+      <div class="card-header">
+        <span class="card-icon">💬</span>
+        <div>
+          <h2 class="card-title">Ask a Cyber Legal Question</h2>
+          <p class="card-desc">Type your question in English or Hindi — answer will match your question exactly</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label for="question-input" class="form-label">Type your question below (English or Hindi)</label>
+          <textarea
+            id="question-input"
+            class="form-textarea"
+            rows="3"
+            placeholder="e.g. My UPI money got transferred to unknown account, what should I do? / Mujhe bahut spam calls aa rahe hain, kya karein?"
+          ></textarea>
+        </div>
+
+        <button id="ask-btn" class="btn btn-primary" onclick="askQuestion()">
+          <span id="ask-btn-text">🔍 Get Legal Guidance</span>
+          <span id="ask-spinner" class="spinner hidden"></span>
+        </button>
+
+        <!-- Answer box -->
+        <div id="answer-box" class="answer-box hidden">
+          <div class="answer-header">
+            <span class="agent-tag">🤖 Q&amp;A Agent</span>
+            <span class="answer-question-label" id="answer-question-label"></span>
+          </div>
+          <div id="answer-text" class="answer-text"></div>
+          <div class="helpline-reminder">
+            📞 Emergency Helpline: <strong>1930</strong> &nbsp;|&nbsp;
+            🌐 Report Online: <strong>cybercrime.gov.in</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 1b: CHECK LINK / URL ===== -->
+    <section class="card hidden" id="url-section">
+      <div class="card-header">
+        <span class="card-icon">🔗</span>
+        <div>
+          <h2 class="card-title">Check Link / URL</h2>
+          <p class="card-desc">Koi bhi link paste karein — phishing, typo-squatting, domain existence check hoga</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label for="url-input" class="form-label">URL ya link yahan paste karein</label>
+          <input
+            type="text"
+            id="url-input"
+            class="form-input"
+            placeholder="e.g. https://sbi-kyc.free.com/update  or  hdfcbnk.com/login"
+          />
+        </div>
+
+        <!-- Quick example chips -->
+        <div class="chip-row">
+          <span class="chip" data-url="http://sbi-kyc.free.com/update">🏦 SBI KYC Fake</span>
+          <span class="chip" data-url="https://www.sbi.co.in">🏦 Real SBI</span>
+          <span class="chip" data-url="https://hdfcbnk.com/login">⚠️ HDFC Typo</span>
+          <span class="chip" data-url="https://cybercrime.gov.in">🛡️ Govt Portal</span>
+        </div>
+
+        <button id="url-btn" class="btn btn-primary" onclick="checkURL()">
+          <span id="url-btn-text">🔎 Check This Link</span>
+          <span id="url-spinner" class="spinner hidden"></span>
+        </button>
+
+        <!-- URL Result Panel -->
+        <div id="url-result-panel" class="results-panel hidden">
+
+          <!-- Risk Score + Domain Status -->
+          <div class="risk-row">
+            <div class="risk-card" id="url-risk-card">
+              <div class="risk-label">Risk Score</div>
+              <div class="risk-score" id="url-risk-score">—</div>
+              <div class="risk-desc" id="url-risk-desc"></div>
+              <div class="domain-status-badge hidden" id="url-domain-badge"></div>
+            </div>
+            <div class="agent-summary-list">
+              <div class="agent-pill active" id="url-domain-pill">🌐 Domain Check</div>
+              <div class="agent-pill active" id="url-typo-pill">🔤 Typo-Squat Check</div>
+              <div class="agent-pill active" id="url-phish-pill">🎣 Phishing Check</div>
+            </div>
+          </div>
+
+          <!-- Warnings -->
+          <div id="url-warnings" class="url-warnings"></div>
+
+          <!-- Score Breakdown -->
+          <div class="score-breakdown hidden" id="url-score-breakdown">
+            <div class="breakdown-title">📊 Score Breakdown</div>
+            <ul class="breakdown-list" id="url-breakdown-list"></ul>
+            <div class="breakdown-total" id="url-breakdown-total"></div>
+          </div>
+
+        </div><!-- /url-result-panel -->
+      </div>
+    </section>
+
+    <!-- ===== SECTION 2: ANALYZE DOCUMENT / PRIVACY POLICY ===== -->
+    <section class="card" id="analyze-section">
+      <div class="card-header">
+        <span class="card-icon">📄</span>
+        <div>
+          <h2 class="card-title">Analyze Document / Privacy Policy</h2>
+          <p class="card-desc">Contract, privacy policy, ya terms of service paste karein — 3 AI agents analyze karenge</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label for="doc-input" class="form-label">Document text yahan paste karein</label>
+          <textarea
+            id="doc-input"
+            class="form-textarea"
+            rows="7"
+            placeholder="Paste your contract, privacy policy, or terms of service here…"
+          ></textarea>
+        </div>
+
+        <!-- Sample load button -->
+        <button class="btn btn-outline" onclick="loadSample()">📋 Load Sample Privacy Policy</button>
+
+        <button id="analyze-btn" class="btn btn-primary" onclick="analyzeDocument()" style="margin-left:0.5rem;">
+          <span id="analyze-btn-text">🔎 Analyze Document</span>
+          <span id="analyze-spinner" class="spinner hidden"></span>
+        </button>
+
+        <!-- Link-only input error box -->
+        <div class="doc-error-box hidden" id="doc-error-box">
+          <span>🔗</span>
+          <span id="doc-error-msg"></span>
+          <button class="doc-error-link" onclick="switchTool('url-section', document.querySelectorAll('.tool-tab')[1])">
+            Go to URL Checker →
+          </button>
+        </div>
+
+        <!-- Results panel -->
+        <div id="results-panel" class="results-panel hidden">
+
+          <!-- Risk Score Card -->
+          <div class="risk-row">
+            <div class="risk-card" id="risk-card">
+              <div class="risk-label">Risk Score</div>
+              <div class="risk-score" id="risk-score-value">—</div>
+              <div class="risk-desc" id="risk-desc">Analyzing…</div>
+              <div class="domain-status-badge hidden" id="domain-status-badge"></div>
+            </div>
+            <div class="agent-summary-list" id="agent-tags">
+              <div class="agent-pill active">🔍 Contract Reviewer</div>
+              <div class="agent-pill active">✅ Compliance Checker</div>
+              <div class="agent-pill active">📚 Case Research</div>
+            </div>
+          </div>
+
+          <!-- Score Breakdown -->
+          <div class="score-breakdown hidden" id="score-breakdown">
+            <div class="breakdown-title">📊 Score Breakdown</div>
+            <ul class="breakdown-list" id="breakdown-list"></ul>
+            <div class="breakdown-total" id="breakdown-total"></div>
+          </div>
+
+          <!-- Tabs -->
+          <div class="tab-bar">
+            <button class="tab-btn active" onclick="showTab('tab-review', this)">📋 Contract Review</button>
+            <button class="tab-btn" onclick="showTab('tab-compliance', this)">⚖️ Compliance</button>
+            <button class="tab-btn" onclick="showTab('tab-research', this)">📚 Case Research</button>
+          </div>
+
+          <!-- Tab: Contract Review -->
+          <div id="tab-review" class="tab-content active">
+            <h3 class="section-title">Summary</h3>
+            <p id="review-summary" class="result-text">—</p>
+            <h3 class="section-title">Risky Clauses</h3>
+            <ul id="review-clauses" class="result-list"></ul>
+          </div>
+
+          <!-- Tab: Compliance -->
+          <div id="tab-compliance" class="tab-content hidden">
+            <div class="two-col">
+              <div>
+                <h3 class="section-title">IT Act 2000 Issues</h3>
+                <ul id="it-act-issues" class="result-list"></ul>
+              </div>
+              <div>
+                <h3 class="section-title">DPDP Act 2023 Issues</h3>
+                <ul id="dpdp-issues" class="result-list"></ul>
+              </div>
+            </div>
+            <h3 class="section-title">⚡ Immediate Action Steps</h3>
+            <ol id="action-steps" class="result-list ordered"></ol>
+          </div>
+
+          <!-- Tab: Case Research -->
+          <div id="tab-research" class="tab-content hidden">
+            <div class="two-col">
+              <div>
+                <h3 class="section-title">IT Act 2000 Sections</h3>
+                <ul id="it-sections" class="result-list"></ul>
+              </div>
+              <div>
+                <h3 class="section-title">DPDP Act 2023 Sections</h3>
+                <ul id="dpdp-sections" class="result-list"></ul>
+              </div>
+            </div>
+            <h3 class="section-title">📖 Notable Precedent</h3>
+            <div id="precedent-box" class="precedent-box"></div>
+            <h3 class="section-title">🔗 Official Resources</h3>
+            <ul id="resources-list" class="result-list"></ul>
+          </div>
+
+          <!-- Phishing Alert Banner (shown only when phishing is detected) -->
+          <div class="phishing-alert" id="phishing-alert" style="display:none;">
+            <div class="phishing-alert-title">🚨 PHISHING / FRAUD ALERT</div>
+            <p>
+              Yeh document ek <strong>phishing attempt</strong> lagta hai.
+              Fake KYC link, insecure <code>http://</code> connection, ya suspicious domain detect hua hai.
+            </p>
+            <ul>
+              <li><strong>Is link pe bilkul click mat karein</strong></li>
+              <li>Apne bank ko turant call karein</li>
+              <li><strong>1930</strong> (Cyber Crime Helpline) pe call karein</li>
+              <li>Complaint darj karein: <strong>cybercrime.gov.in</strong></li>
+            </ul>
+          </div>
+
+          <!-- Action Steps Summary (always visible at bottom of results) -->
+          <div class="action-banner" id="action-banner"></div>
+
+        </div><!-- /results-panel -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <p>
+      Built with ❤️ using <strong>Python Flask</strong> + <strong>IBM Granite</strong> (watsonx.ai)
+      &nbsp;·&nbsp; IT Act 2000 &amp; DPDP Act 2023 &nbsp;·&nbsp;
+      <a href="https://cybercrime.gov.in" target="_blank" rel="noopener">cybercrime.gov.in</a>
+    </p>
+    <p class="footer-disclaimer">
+      ⚠️ Not a substitute for a qualified lawyer. For legal emergencies call <strong>1930</strong>.
+    </p>
+  </footer>
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+    /* ------------------------------------------------------------------ */
+    /*  UTILITY                                                             */
+    /* ------------------------------------------------------------------ */
+    function setLoading(btnId, spinnerId, loading) {
+      const btn     = document.getElementById(btnId);
+      const spinner = document.getElementById(spinnerId);
+      const text    = document.getElementById(btnId + '-text');
+      btn.disabled  = loading;
+      spinner.classList.toggle('hidden', !loading);
+      text.style.opacity = loading ? '0.5' : '1';
+    }
+
+    function showTab(tabId, btn) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).classList.remove('hidden');
+      btn.classList.add('active');
+    }
+
+    function renderList(ulId, items) {
+      const ul = document.getElementById(ulId);
+      ul.innerHTML = '';
+      if (!items || items.length === 0) {
+        ul.innerHTML = '<li class="result-empty">Koi issue nahi mila ✅</li>';
+        return;
+      }
+      items.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = typeof item === 'object' ? JSON.stringify(item) : item;
+        ul.appendChild(li);
+      });
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  TOOL TABS — switch between Ask / URL / Analyze sections            */
+    /* ------------------------------------------------------------------ */
+    function switchTool(sectionId, btn) {
+      ['ask-section', 'url-section', 'analyze-section'].forEach(id => {
+        document.getElementById(id).classList.toggle('hidden', id !== sectionId);
+      });
+      document.querySelectorAll('.tool-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  QUICK CHIPS                                                         */
+    /* ------------------------------------------------------------------ */
+    document.querySelectorAll('.chip[data-prompt]').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.getElementById('question-input').value = chip.dataset.prompt;
+        document.getElementById('question-input').focus();
+      });
+    });
+
+    document.querySelectorAll('.chip[data-url]').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.getElementById('url-input').value = chip.dataset.url;
+        document.getElementById('url-input').focus();
+      });
+    });
+
+    /* ------------------------------------------------------------------ */
+    /*  SECTION 1 — ASK A QUESTION                                         */
+    /* ------------------------------------------------------------------ */
+    async function askQuestion() {
+      const question = document.getElementById('question-input').value.trim();
+      if (!question) {
+        alert('Please enter your question first.');
+        return;
+      }
+      setLoading('ask-btn', 'ask-spinner', true);
+      document.getElementById('answer-box').classList.add('hidden');
+
+      try {
+        const res  = await fetch('/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question }),
+        });
+        const data = await res.json();
+
+        // Show "Your Question: ..." above the answer
+        document.getElementById('answer-question-label').textContent =
+          'Your Question: ' + question;
+
+        document.getElementById('answer-text').textContent =
+          data.answer || data.error || 'No response received.';
+        document.getElementById('answer-box').classList.remove('hidden');
+      } catch (err) {
+        document.getElementById('answer-text').textContent =
+          'Network error: ' + err.message;
+        document.getElementById('answer-box').classList.remove('hidden');
+      } finally {
+        setLoading('ask-btn', 'ask-spinner', false);
+      }
+    }
+
+    /* Enter key shortcut */
+    document.getElementById('question-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter' && e.ctrlKey) askQuestion();
+    });
+
+    /* ------------------------------------------------------------------ */
+    /*  SECTION 2 — ANALYZE DOCUMENT                                       */
+    /* ------------------------------------------------------------------ */
+    /* ------------------------------------------------------------------ */
+    /*  URL CHECKER                                                         */
+    /* ------------------------------------------------------------------ */
+    function _applyRiskCard(cardId, descId, score, isPhish, domainNotFound) {
+      const card = document.getElementById(cardId);
+      card.className = 'risk-card';
+      if (isPhish || domainNotFound) {
+        card.classList.add(domainNotFound ? 'risk-high' : 'risk-phishing');
+      } else if (score >= 70)      card.classList.add('risk-high');
+        else if (score >= 30)      card.classList.add('risk-medium');
+        else                       card.classList.add('risk-low');
+
+      const descMap = {
+        'risk-phishing': '🚨 PHISHING DETECTED',
+        'risk-high':     'High Risk ⚠️',
+        'risk-medium':   'Medium Risk ⚡',
+        'risk-low':      'Low Risk ✅',
+      };
+      const descKey = [...card.classList].find(c => c.startsWith('risk-'));
+      document.getElementById(descId).textContent = descMap[descKey] || '';
+    }
+
+    function _renderDomainBadge(badgeId, domainStatus) {
+      const badge = document.getElementById(badgeId);
+      badge.className = 'domain-status-badge';
+      if (!domainStatus || domainStatus === 'No Link') { badge.classList.add('hidden'); return; }
+      if (domainStatus === 'Not Found') {
+        badge.textContent = '⚠️ Domain: Not Found';
+        badge.classList.add('ds-not-found');
+      } else if (domainStatus === 'Known Trusted Brand') {
+        badge.textContent = '✅ Domain: Known Trusted Brand';
+        badge.classList.add('ds-trusted');
+      } else if (domainStatus === 'Cannot Verify Online') {
+        badge.textContent = '🔍 Domain: Cannot Verify Online';
+        badge.classList.add('ds-unknown');
+      } else {
+        badge.textContent = `🔍 Domain: ${domainStatus}`;
+        badge.classList.add('ds-unknown');
+      }
+    }
+
+    function _renderBreakdown(listId, totalId, panelId, breakdown, finalScore) {
+      const list  = document.getElementById(listId);
+      const total = document.getElementById(totalId);
+      const panel = document.getElementById(panelId);
+      list.innerHTML = '';
+      if (!breakdown || !breakdown.length) { panel.classList.add('hidden'); return; }
+      breakdown.forEach(item => {
+        const li  = document.createElement('li');
+        const pts = item.points > 0 ? `+${item.points}` : (item.points === 0 ? '⚠️' : item.points);
+        li.innerHTML = `<span class="bd-label">${item.label}</span><span class="bd-pts">${pts}</span>`;
+        list.appendChild(li);
+      });
+      const sum = breakdown.filter(i => i.points > 0).reduce((s, i) => s + i.points, 0);
+      total.textContent = `Total: ${sum} pts → Final Score: ${finalScore}/100`;
+      panel.classList.remove('hidden');
+    }
+
+    async function checkURL() {
+      const url = document.getElementById('url-input').value.trim();
+      if (!url) { alert('Please enter a URL first.'); return; }
+      setLoading('url-btn', 'url-spinner', true);
+      document.getElementById('url-result-panel').classList.add('hidden');
+
+      try {
+        const res  = await fetch('/check-url', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url }),
+        });
+        const d = await res.json();
+        if (d.error) { alert(d.message || d.error); return; }
+
+        // Risk card
+        const domainNotFound = d.domain_status === 'Not Found';
+        _applyRiskCard('url-risk-card', 'url-risk-desc', d.risk_score, d.phishing_flag, domainNotFound);
+        document.getElementById('url-risk-score').textContent = d.risk_score;
+
+        // Domain badge
+        _renderDomainBadge('url-domain-badge', d.domain_status);
+
+        // Status pills
+        document.getElementById('url-domain-pill').textContent =
+          '🌐 Domain: ' + (d.domain_status || 'Unknown');
+        document.getElementById('url-typo-pill').textContent =
+          d.typosquat?.is_typosquat ? '🔤 Typo-Squat: ⚠️ YES' : '🔤 Typo-Squat: ✅ No';
+        document.getElementById('url-phish-pill').textContent =
+          d.phishing_flag ? '🎣 Phishing: 🚨 YES' : '🎣 Phishing: ✅ No';
+
+        // Warnings
+        const warnDiv = document.getElementById('url-warnings');
+        warnDiv.innerHTML = '';
+        (d.warnings || []).forEach(w => {
+          const box = document.createElement('div');
+          box.className = 'url-warning-item';
+          box.textContent = '⚠️ ' + w;
+          warnDiv.appendChild(box);
+        });
+
+        // Breakdown
+        _renderBreakdown('url-breakdown-list', 'url-breakdown-total', 'url-score-breakdown',
+                         d.score_breakdown, d.risk_score);
+
+        document.getElementById('url-result-panel').classList.remove('hidden');
+      } catch (err) {
+        alert('Network error: ' + err.message);
+      } finally {
+        setLoading('url-btn', 'url-spinner', false);
+      }
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  SECTION 2 — ANALYZE DOCUMENT                                       */
+    /* ------------------------------------------------------------------ */
+    async function analyzeDocument() {
+      const doc = document.getElementById('doc-input').value.trim();
+      if (!doc) {
+        alert('Please paste a document first.');
+        return;
+      }
+      setLoading('analyze-btn', 'analyze-spinner', true);
+      document.getElementById('results-panel').classList.add('hidden');
+
+      try {
+        const res  = await fetch('/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ document: doc }),
+        });
+        const data = await res.json();
+
+        // Show friendly error if user pasted a link instead of document text
+        if (data.error === 'link_only') {
+          const errBox = document.getElementById('doc-error-box');
+          document.getElementById('doc-error-msg').textContent = data.message;
+          errBox.classList.remove('hidden');
+          return;
+        }
+        document.getElementById('doc-error-box')?.classList.add('hidden');
+
+        renderResults(data);
+        document.getElementById('results-panel').classList.remove('hidden');
+      } catch (err) {
+        alert('Network error: ' + err.message);
+      } finally {
+        setLoading('analyze-btn', 'analyze-spinner', false);
+      }
+    }
+
+    function renderResults(data) {
+      /* --- Risk Score --- */
+      const score   = data.contract_review?.risk_score;
+      const isPhish = data.contract_review?.phishing_flag === true;
+      document.getElementById('risk-score-value').textContent =
+        (score !== undefined && score !== null) ? score : '—';
+
+      _applyRiskCard('risk-card', 'risk-desc', score, isPhish, false);
+
+      // Phishing banner
+      const phishBanner = document.getElementById('phishing-alert');
+      phishBanner.style.display = isPhish ? 'block' : 'none';
+
+      // Domain status badge (reuses shared helper)
+      _renderDomainBadge('domain-status-badge', data.contract_review?.domain_status || 'No Link');
+
+      // Score breakdown (reuses shared helper)
+      _renderBreakdown('breakdown-list', 'breakdown-total', 'score-breakdown',
+                       data.contract_review?.score_breakdown || [], score);
+
+      /* --- Contract Review Tab --- */
+      document.getElementById('review-summary').textContent =
+        data.contract_review?.summary || 'N/A';
+      renderList('review-clauses', data.contract_review?.risky_clauses);
+
+      /* --- Compliance Tab --- */
+      renderList('it-act-issues', data.compliance?.it_act_issues);
+      renderList('dpdp-issues',   data.compliance?.dpdp_issues);
+      renderList('action-steps',  data.compliance?.action_steps);
+
+      /* --- Case Research Tab --- */
+      renderList('it-sections',  data.case_research?.it_act_sections);
+      renderList('dpdp-sections', data.case_research?.dpdp_sections);
+
+      const prec = data.case_research?.precedent;
+      document.getElementById('precedent-box').innerHTML =
+        prec ? `<strong>${prec.name}</strong><p>${prec.summary}</p>` : 'N/A';
+
+      renderList('resources-list', data.case_research?.resources);
+
+      /* --- Action Banner --- */
+      const steps = data.compliance?.action_steps;
+      if (steps && steps.length) {
+        document.getElementById('action-banner').innerHTML =
+          `<strong>⚡ Immediate Action Steps:</strong><ol>` +
+          steps.map(s => `<li>${s}</li>`).join('') +
+          `</ol>`;
+        document.getElementById('action-banner').style.display = 'block';
+      } else {
+        document.getElementById('action-banner').style.display = 'none';
+      }
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  SAMPLE PRIVACY POLICY LOADER                                       */
+    /* ------------------------------------------------------------------ */
+    function loadSample() {
+      document.getElementById('doc-input').value = `Privacy Policy — SampleApp
+
+1. Data Collection: We collect your name, email, phone number, location data, and browsing history to improve our services. We may share this data with third-party advertising partners without explicit consent.
+
+2. Data Retention: User data is retained indefinitely. We do not provide a mechanism for users to request deletion of their data.
+
+3. Security: We take reasonable precautions but do not guarantee protection against data breaches. In the event of a breach, we will notify users within 90 days.
+
+4. Third-Party Sharing: We reserve the right to sell anonymised user data to research firms and marketing companies. Users cannot opt out of this sharing.
+
+5. Children's Data: Our service is intended for users above 13 years. We do not knowingly collect data from children under 13, however we have no verification mechanism.
+
+6. Governing Law: Disputes shall be settled under the laws of a foreign jurisdiction, waiving users' rights under Indian law.`;
+    }
+  </script>
+
+</body>
+</html>

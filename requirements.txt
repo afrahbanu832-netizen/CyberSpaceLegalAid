@@ -1,0 +1,6 @@
+# CyberSafe Legal Aid — Python dependencies
+# Install with: pip install -r requirements.txt
+
+Flask==3.0.3
+python-dotenv==1.0.1
+requests==2.32.3
